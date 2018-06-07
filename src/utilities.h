@@ -10,6 +10,12 @@
 #define printlnf(chars, ...) printf((chars "\n"), ##__VA_ARGS__)
 #define errprintlnf(chars, ...) fprintf(stderr, (chars "\n"), ##__VA_ARGS__)
 
+#ifdef DEBUG
+#define debugprintlnf printlnf
+#else
+#define debugprintlnf
+#endif
+
 #ifdef __cplusplus
  #define CGUARD extern "C" {
  #define CGUARD_END };
