@@ -1,2 +1,2 @@
 # launchr
-A launcher with a spelling issue
+A launcher with a typo
