@@ -6,7 +6,9 @@
 #define LAUNCHR_CONFIGURATION_H
 
 
+#include <vector>
 #include "ConfigurationError.h"
+#include "LaunchCommand.h"
 
 namespace launchr {
   class Configuration {
@@ -14,6 +16,7 @@ namespace launchr {
       const char *confpath;
   public:
       Configuration(const char *path);
+      std::vector<LaunchCommand> commands;
       void parse(ConfigurationError **configurationError);
   };
 };

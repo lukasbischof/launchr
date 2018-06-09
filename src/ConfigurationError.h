@@ -16,11 +16,11 @@ namespace launchr {
 
   class ConfigurationError {
   public:
-    string message;
+    const char *message;
     ConfigurationErrorType type;
     const unsigned int line;
 
-    ConfigurationError(string message, ConfigurationErrorType type, unsigned int line)
+    ConfigurationError(const char *message, ConfigurationErrorType type, unsigned int line)
         : message(message), type(type), line(line) {};
 
     const char *description();

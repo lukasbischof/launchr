@@ -19,7 +19,15 @@ static inline void ltrim(std::string &string) {
   }));
 }
 
-Configuration::Configuration(const char *path) : confpath(path) { };
+Configuration::Configuration(const char *path) : confpath(path) {
+  commands = std::vector<LaunchCommand>();
+};
+
+static ConfigurationError *handle_conf_statement(string line, LaunchCommand *current_command) {
+  current_command->name = string("hi");
+
+  return NULL;
+}
 
 void Configuration::parse(ConfigurationError **configurationError) {
   ifstream ifstream(confpath);
@@ -31,19 +39,37 @@ void Configuration::parse(ConfigurationError **configurationError) {
     current_line_number++;
     ltrim(line);
 
-    if (regex_search(line, REGEX("$\\#.*")))
+    if (regex_search(line, REGEX("^\\#.*")))
       continue;
 
     bool is_block_start = regex_search(line, REGEX("\\{\\s*"));
     if (is_block_start) {
+      // Beginning of a new command block
+
       if (current_command != NULL) {
-        ConfigurationError error(string("Unexpected start of new block"), kConfigurationErrorTypeSyntaxError, current_line_number);
+        ConfigurationError error("Unexpected start of new block", kConfigurationErrorTypeSyntaxError, current_line_number);
         *configurationError = &error;
         goto closing;
       }
 
       LaunchCommand mycommand;
       current_command = &mycommand;
+    } else {
+      bool is_block_end = regex_search(line, REGEX("\\}\\s*"));
+      if (is_block_end) {
+        // End of a new command block
+
+        commands.push_back(*current_command);
+        current_command = NULL;
+      } else {
+        // Handle statement inside a command block
+
+        ConfigurationError *error = handle_conf_statement(line, current_command);
+        if (error != NULL) {
+          *configurationError = error;
+          goto closing;
+        }
+      }
     }
   }
 
