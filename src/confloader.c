@@ -29,7 +29,7 @@ static inline boolean_t fexists(const char *f) {
 const char *getconfpath() {
   const char *homedir;
   if ((homedir = getenv("HOME")) != NULL) {
-    char *localconf = malloc(1024);
+    char *localconf = malloc(512);
     sprintf(localconf, "%s/.launchr.conf", homedir);
     if (fexists(localconf)) {
       return localconf;

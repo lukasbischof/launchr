@@ -2,8 +2,10 @@
 #include <zconf.h>
 #include "utilities.h"
 #include "confloader.h"
+#include "Configuration.h"
 
 using namespace std;
+using namespace launchr;
 
 int main() {
   char cwd[1024];
@@ -19,9 +21,15 @@ int main() {
   if (confpath == NULL) {
       errprintlnf("Cannot load configuration");
       return EXIT_FAILURE;
+  } else {
+      debugprintlnf("loading configuration %s", confpath);
   }
 
-
+  Configuration configuration(confpath);
+  if (!configuration.parse()) {
+    errprintlnf("Can't read configuration file");
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }
