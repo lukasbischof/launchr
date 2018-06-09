@@ -26,7 +26,7 @@ static inline boolean_t fexists(const char *f) {
   return access(f, F_OK) != -1;
 }
 
-static const char *getconfpath() {
+const char *getconfpath() {
   const char *homedir;
   if ((homedir = getenv("HOME")) != NULL) {
     char *localconf = malloc(1024);
@@ -48,17 +48,4 @@ static const char *getconfpath() {
   }
 
   return NULL;
-}
-
-boolean_t load_conf() {
-  debugprintlnf("loading configuration...");
-
-  const char *path = getconfpath();
-  if (path == NULL) {
-    debugprintlnf("Can't retrieve configuration file path");
-  }
-
-  debugprintlnf("Using configuration %s", path);
-
-  return TRUE;
 }

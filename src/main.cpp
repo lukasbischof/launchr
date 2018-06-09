@@ -15,7 +15,13 @@ int main() {
     cout << cwd << endl;
   }
 
-  load_conf();
+  const char *confpath = getconfpath();
+  if (confpath == NULL) {
+      errprintlnf("Cannot load configuration");
+      return EXIT_FAILURE;
+  }
+
+
 
   return EXIT_SUCCESS;
 }

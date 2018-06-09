@@ -10,7 +10,7 @@
 
 CGUARD
 
-boolean_t load_conf();
+const char *getconfpath();
 
 CGUARD_END
 
