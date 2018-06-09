@@ -6,13 +6,15 @@
 #define LAUNCHR_CONFIGURATION_H
 
 
+#include "ConfigurationError.h"
+
 namespace launchr {
   class Configuration {
   private:
       const char *confpath;
   public:
       Configuration(const char *path);
-      bool parse();
+      void parse(ConfigurationError **configurationError);
   };
 };
 

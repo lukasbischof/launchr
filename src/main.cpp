@@ -26,8 +26,10 @@ int main() {
   }
 
   Configuration configuration(confpath);
-  if (!configuration.parse()) {
-    errprintlnf("Can't read configuration file");
+  ConfigurationError *error;
+  configuration.parse(&error);
+  if (error != NULL) {
+    errprintlnf("Can't read configuration file: %s", error->description());
     return EXIT_FAILURE;
   }
 
