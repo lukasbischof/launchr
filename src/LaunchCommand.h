@@ -8,12 +8,14 @@
 
 #include <string>
 
-class LaunchCommand {
-public:
+namespace launchr {
+  class LaunchCommand {
+  public:
     std::string name;
     std::string command;
     std::string test;
-};
+  };
+}
 
 
 #endif //LAUNCHR_LAUNCHCOMMAND_H
