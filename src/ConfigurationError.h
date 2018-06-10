@@ -13,6 +13,8 @@ using namespace std;
 namespace launchr {
   typedef const char *ConfigurationErrorType;
   static ConfigurationErrorType kConfigurationErrorTypeSyntaxError = "SyntaxError";
+  static ConfigurationErrorType kConfigurationErrorTypeStatementError = "StatementError";
+  static ConfigurationErrorType kConfigurationErrorTypeNone = "NoError";
 
   class ConfigurationError {
   public:
@@ -23,6 +25,9 @@ namespace launchr {
     ConfigurationError(const char *message, ConfigurationErrorType type, unsigned int line)
         : message(message), type(type), line(line) {};
 
+    static ConfigurationError no_error();
+    
+    bool is_no_error() const;
     const char *description();
   };
 };

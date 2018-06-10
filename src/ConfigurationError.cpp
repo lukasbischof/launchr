@@ -10,3 +10,11 @@ const char *launchr::ConfigurationError::description() {
 
   return output;
 }
+
+launchr::ConfigurationError launchr::ConfigurationError::no_error() {
+  return ConfigurationError(NULL, kConfigurationErrorTypeNone, -1);
+}
+
+bool launchr::ConfigurationError::is_no_error() const {
+  return type == kConfigurationErrorTypeNone;
+}

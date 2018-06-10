@@ -7,13 +7,27 @@
 
 
 #include <string>
+#include <map>
+
+using namespace std;
 
 namespace launchr {
   class LaunchCommand {
   public:
-    std::string name;
-    std::string command;
-    std::string test;
+    const char *name() const;
+    const char *command() const;
+    const char *test() const;
+    
+    LaunchCommand();
+    
+    void add_statement(string key, string value);
+    bool validate() const;
+    
+  protected:
+    map<string, string> statements;
+    
+  private:
+    const char *get_statement(std::string key) const;
   };
 }
 

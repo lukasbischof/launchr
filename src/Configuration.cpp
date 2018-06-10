@@ -13,8 +13,8 @@
 using namespace launchr;
 using namespace std;
 
-static inline void ltrim(std::string &string) {
-  string.erase(string.begin(), std::find_if(string.begin(), string.end(), [](int ch) {
+static inline void ltrim(string &string) {
+  string.erase(string.begin(), find_if(string.begin(), string.end(), [](int ch) {
     return !isspace(ch);
   }));
 }
@@ -23,10 +23,34 @@ Configuration::Configuration(const char *path) : confpath(path) {
   commands = std::vector<LaunchCommand>();
 };
 
-static ConfigurationError *handle_conf_statement(string line, LaunchCommand *current_command) {
-  current_command->name = string("hi");
+static ConfigurationError parse_statement(string &content, string &keyword, const string line, unsigned int current_line) {
+  auto delemiter_index = line.find(string(":"));
+  if (delemiter_index == string::npos) {
+    return ConfigurationError("No delemiter found", kConfigurationErrorTypeSyntaxError, current_line);
+  }
+  
+  keyword = line.substr(0, delemiter_index);
+  content = line.substr(delemiter_index + 1, line.length());
+  
+  if (content.length() == 0) {
+    return ConfigurationError("statement is empty", kConfigurationErrorTypeStatementError, current_line);
+  }
+  
+  ltrim(content);
+  
+  return ConfigurationError::no_error();
+}
 
-  return NULL;
+static ConfigurationError handle_conf_statement(string line, LaunchCommand *current_command, unsigned int current_line) {
+  string keyword;
+  string content;
+  ConfigurationError error = parse_statement(content, keyword, line, current_line);
+  if (!error.is_no_error())
+    return error;
+  
+  current_command->add_statement(keyword, content);
+
+  return ConfigurationError::no_error();
 }
 
 void Configuration::parse(ConfigurationError **configurationError) {
@@ -59,14 +83,20 @@ void Configuration::parse(ConfigurationError **configurationError) {
       if (is_block_end) {
         // End of a new command block
 
+        if (!current_command->validate()) {
+          ConfigurationError error("Block is missing required keywords", kConfigurationErrorTypeStatementError, current_line_number);
+          *configurationError = &error;
+          goto closing;
+        }
+        
         commands.push_back(*current_command);
         current_command = NULL;
       } else {
         // Handle statement inside a command block
 
-        ConfigurationError *error = handle_conf_statement(line, current_command);
-        if (error != NULL) {
-          *configurationError = error;
+        ConfigurationError error = handle_conf_statement(line, current_command, current_line_number);
+        if (!error.is_no_error()) {
+          *configurationError = &error;
           goto closing;
         }
       }
