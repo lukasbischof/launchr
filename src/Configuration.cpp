@@ -8,7 +8,8 @@
 #include <iostream>
 #include <regex>
 
-#define REGEX(matcher) regex(matcher, regex::ECMAScript | regex::icase)
+#define REGEX(matcher) regex((matcher), regex::ECMAScript | regex::icase)
+#define TEST(string, regex_string) regex_search((string), REGEX(regex_string))
 
 using namespace launchr;
 using namespace std;
@@ -53,6 +54,18 @@ static ConfigurationError handle_conf_statement(string line, LaunchCommand *curr
   return ConfigurationError::no_error();
 }
 
+static void process_line(std::string &line) {
+  ltrim(line);
+  
+  if (line.find("#") != string::npos) {
+    line = regex_replace(line, REGEX("#.*$"), "");
+  }
+}
+
+static bool is_invalid_line(const string &line) {
+  return TEST(line, "^\\s*$");
+}
+
 void Configuration::parse(ConfigurationError **configurationError) {
   ifstream ifstream(confpath);
   string line;
@@ -61,12 +74,15 @@ void Configuration::parse(ConfigurationError **configurationError) {
 
   while (getline(ifstream, line)) {
     current_line_number++;
-    ltrim(line);
-
-    if (regex_search(line, REGEX("^\\#.*")))
+    
+    process_line(line);
+    
+    if (is_invalid_line(line))
       continue;
-
-    bool is_block_start = regex_search(line, REGEX("\\{\\s*"));
+    
+    cout << line << endl;
+    
+    bool is_block_start = TEST(line, "\\{\\s*");
     if (is_block_start) {
       // Beginning of a new command block
 
@@ -79,7 +95,7 @@ void Configuration::parse(ConfigurationError **configurationError) {
       LaunchCommand mycommand;
       current_command = &mycommand;
     } else {
-      bool is_block_end = regex_search(line, REGEX("\\}\\s*"));
+      bool is_block_end = TEST(line, "\\}\\s*");
       if (is_block_end) {
         // End of a new command block
 
