@@ -27,25 +27,23 @@ static inline boolean_t fexists(const char *f) {
 }
 
 const char *getconfpath() {
+  const char *sysconf = "/etc/launchr.conf";
+  boolean_t sysconf_exists = fexists(sysconf);
+  
   const char *homedir;
   if ((homedir = getenv("HOME")) != NULL) {
     char *localconf = malloc(512);
     sprintf(localconf, "%s/.launchr.conf", homedir);
     if (fexists(localconf)) {
       return localconf;
-    } else {
-      const char *sysconf = "/etc/launchr.conf";
-      if (fexists(sysconf)) {
-        return sysconf;
-      } else {
-        debugprintlnf("No config file found. Creating one...");
-
-        if (create_local_conf(localconf)) {
-          return localconf;
-        }
+    } else if (!sysconf_exists) {
+      debugprintlnf("No config file found. Creating one...");
+      
+      if (create_local_conf(localconf)) {
+        return localconf;
       }
     }
   }
 
-  return NULL;
+  return (sysconf_exists) ? sysconf : NULL;
 }
