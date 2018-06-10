@@ -11,9 +11,9 @@
 #define errprintlnf(chars, ...) fprintf(stderr, (chars "\n"), ##__VA_ARGS__)
 
 #ifdef DEBUG
-#define debugprintlnf printlnf
+ #define debugprintlnf printlnf
 #else
-#define debugprintlnf
+ #define debugprintlnf
 #endif
 
 #ifdef __cplusplus
