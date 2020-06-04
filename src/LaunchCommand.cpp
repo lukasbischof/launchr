@@ -20,13 +20,13 @@ namespace launchr {
     statements = std::map<std::string, std::string>();
   }
   
-  void LaunchCommand::add_statement(std::string key, std::string value) {
+  void LaunchCommand::add_statement(const std::string &key, const std::string &value) {
     statements.insert(std::pair<std::string, std::string>(key, value));
   }
   
-  const char *LaunchCommand::get_statement(std::string key) const {
+  const char *LaunchCommand::get_statement(const std::string &key) const {
     if (statements.find(key) == statements.end()) {
-      return NULL;
+      return nullptr;
     } else {
       return statements.at(key).c_str();
     }

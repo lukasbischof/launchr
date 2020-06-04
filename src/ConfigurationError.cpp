@@ -12,7 +12,7 @@ const char *launchr::ConfigurationError::description() {
 }
 
 launchr::ConfigurationError launchr::ConfigurationError::no_error() {
-  return ConfigurationError(NULL, kConfigurationErrorTypeNone, -1);
+  return ConfigurationError(nullptr, kConfigurationErrorTypeNone, -1);
 }
 
 bool launchr::ConfigurationError::is_no_error() const {

@@ -24,17 +24,17 @@ Configuration::Configuration(const char *path) : confpath(path) {
   commands = std::vector<LaunchCommand>();
 };
 
-static ConfigurationError parse_statement(string &content, string &keyword, const string line, unsigned int current_line) {
+static ConfigurationError parse_statement(string &content, string &keyword, const string &line, unsigned int current_line) {
   auto delemiter_index = line.find(string(":"));
   if (delemiter_index == string::npos) {
-    return ConfigurationError("No delemiter found", kConfigurationErrorTypeSyntaxError, current_line);
+    return {"No delemiter found", kConfigurationErrorTypeSyntaxError, current_line};
   }
   
   keyword = line.substr(0, delemiter_index);
   content = line.substr(delemiter_index + 1, line.length());
   
   if (content.length() == 0) {
-    return ConfigurationError("statement is empty", kConfigurationErrorTypeStatementError, current_line);
+    return {"statement is empty", kConfigurationErrorTypeStatementError, current_line};
   }
   
   ltrim(content);
@@ -42,7 +42,7 @@ static ConfigurationError parse_statement(string &content, string &keyword, cons
   return ConfigurationError::no_error();
 }
 
-static ConfigurationError handle_conf_statement(string line, LaunchCommand *current_command, unsigned int current_line) {
+static ConfigurationError handle_conf_statement(string &line, LaunchCommand *current_command, unsigned int current_line) {
   string keyword;
   string content;
   ConfigurationError error = parse_statement(content, keyword, line, current_line);
@@ -57,7 +57,7 @@ static ConfigurationError handle_conf_statement(string line, LaunchCommand *curr
 static void process_line(std::string &line) {
   ltrim(line);
   
-  if (line.find("#") != string::npos) {
+  if (line.find('#') != string::npos) {
     line = regex_replace(line, REGEX("#.*$"), "");
   }
 }
@@ -69,7 +69,7 @@ static bool is_invalid_line(const string &line) {
 void Configuration::parse(ConfigurationError **configurationError) {
   ifstream ifstream(confpath);
   string line;
-  LaunchCommand *current_command = NULL;
+  LaunchCommand *current_command = nullptr;
   unsigned int current_line_number = 0;
 
   while (getline(ifstream, line)) {
@@ -86,7 +86,7 @@ void Configuration::parse(ConfigurationError **configurationError) {
     if (is_block_start) {
       // Beginning of a new command block
 
-      if (current_command != NULL) {
+      if (current_command != nullptr) {
         ConfigurationError error("Unexpected start of new block", kConfigurationErrorTypeSyntaxError, current_line_number);
         *configurationError = &error;
         goto closing;
@@ -106,7 +106,7 @@ void Configuration::parse(ConfigurationError **configurationError) {
         }
         
         commands.push_back(*current_command);
-        current_command = NULL;
+        current_command = nullptr;
       } else {
         // Handle statement inside a command block
 
@@ -121,5 +121,4 @@ void Configuration::parse(ConfigurationError **configurationError) {
 
 closing:
   ifstream.close();
-  return;
 }

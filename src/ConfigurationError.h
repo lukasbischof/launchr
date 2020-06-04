@@ -5,7 +5,7 @@
 #ifndef LAUNCHR_CONFIGURATIONERROR_H
 #define LAUNCHR_CONFIGURATIONERROR_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 
 using namespace std;

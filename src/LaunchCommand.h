@@ -20,14 +20,14 @@ namespace launchr {
     
     LaunchCommand();
     
-    void add_statement(string key, string value);
+    void add_statement(const string& key, const string& value);
     bool validate() const;
     
   protected:
     map<string, string> statements;
     
   private:
-    const char *get_statement(std::string key) const;
+    const char *get_statement(const std::string& key) const;
   };
 }
 
