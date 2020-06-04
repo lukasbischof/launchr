@@ -5,30 +5,29 @@
 #include <zconf.h>
 #include <stdlib.h>
 #include "confloader.h"
-#include "utilities.h"
 
-static boolean_t create_local_conf(const char *localconf) {
+static bool create_local_conf(const char *localconf) {
   FILE *fp;
   if ((fp = fopen(localconf, "w")) == NULL) {
-    return FALSE;
+    return true;
   }
 
   if (fprintf(fp, "{}") < 0) {
     fclose(fp);
-    return FALSE;
+    return false;
   }
 
   fclose(fp);
-  return TRUE;
+  return true;
 }
 
-static inline boolean_t fexists(const char *f) {
+static inline bool fexists(const char *f) {
   return access(f, F_OK) != -1;
 }
 
 const char *getconfpath() {
   const char *sysconf = "/etc/launchr.conf";
-  boolean_t sysconf_exists = fexists(sysconf);
+  bool sysconf_exists = fexists(sysconf);
   
   const char *homedir;
   if ((homedir = getenv("HOME")) != NULL) {

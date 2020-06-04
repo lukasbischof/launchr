@@ -5,7 +5,7 @@
 #ifndef LAUNCHR_CONFLOADER_H
 #define LAUNCHR_CONFLOADER_H
 
-#include <mach/boolean.h>
+#include <stdbool.h>
 #include "utilities.h"
 
 CGUARD
