@@ -1,3 +1,7 @@
 /cmake-build-debug/
 /.idea/
 build-xcode/
+Makefile
+src/CMakeFiles/
+CMakeFiles/
+cmake_install.cmake
