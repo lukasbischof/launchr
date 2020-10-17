@@ -28,7 +28,7 @@ static inline bool fexists(const char *f) {
 const char *getconfpath() {
   const char *sysconf = "/etc/launchr.conf";
   bool sysconf_exists = fexists(sysconf);
-  
+
   const char *homedir;
   if ((homedir = getenv("HOME")) != NULL) {
     char *localconf = malloc(512);
@@ -37,7 +37,7 @@ const char *getconfpath() {
       return localconf;
     } else if (!sysconf_exists) {
       debugprintlnf("No config file found. Creating one...");
-      
+
       if (create_local_conf(localconf)) {
         return localconf;
       }

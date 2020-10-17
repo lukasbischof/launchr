@@ -26,8 +26,9 @@ namespace launchr {
         : message(message), type(type), line(line) {};
 
     static ConfigurationError no_error();
-    
+
     bool is_no_error() const;
+
     const char *description();
   };
 };

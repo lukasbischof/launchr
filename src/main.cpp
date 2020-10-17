@@ -19,10 +19,10 @@ int main() {
 
   const char *confpath = getconfpath();
   if (confpath == nullptr) {
-      errprintlnf("Cannot load configuration");
-      return EXIT_FAILURE;
+    errprintlnf("Cannot load configuration");
+    return EXIT_FAILURE;
   } else {
-      debugprintlnf("loading configuration %s", confpath);
+    debugprintlnf("loading configuration %s", confpath);
   }
 
   Configuration configuration(confpath);

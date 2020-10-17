@@ -13,11 +13,13 @@
 namespace launchr {
   class Configuration {
   private:
-      const char *confpath;
+    const char *confpath;
   public:
-      explicit Configuration(const char *path);
-      std::vector<LaunchCommand> commands;
-      void parse(ConfigurationError **configurationError);
+    explicit Configuration(const char *path);
+
+    std::vector<LaunchCommand> commands;
+
+    void parse(ConfigurationError **configurationError);
   };
 };
 
